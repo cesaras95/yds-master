@@ -115,3 +115,21 @@
     else showForm();
   });
 })();
+
+// ---------- Telefon: alt menü çubuğu ----------
+(function () {
+  var sheet = document.getElementById("sheet"), more = document.getElementById("tab-more");
+  if (!sheet || !more) return;
+  var MORE = ["hatalar", "istatistik", "rehber", "yedek"];
+  function mark() {
+    var r = (location.hash.replace(/^#\/?/, "").split("/")[0]) || "panel";
+    document.querySelectorAll("#tabbar a, #sheet a").forEach(function (a) { a.classList.toggle("active", a.dataset.route === r); });
+    more.classList.toggle("active", MORE.indexOf(r) >= 0);
+    sheet.hidden = true;
+    window.scrollTo(0, 0);
+  }
+  more.addEventListener("click", function () { sheet.hidden = !sheet.hidden; });
+  sheet.addEventListener("click", function (e) { if (e.target === sheet) sheet.hidden = true; });
+  window.addEventListener("hashchange", mark);
+  mark();
+})();
