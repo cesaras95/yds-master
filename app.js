@@ -192,7 +192,7 @@
         : "<p>" + EXAM_SETS.length + " ÖSYM sınavı gerçek sınav koşullarında çözülmeye hazır.</p>") +
         '<button class="btn" data-act="mocklist">Deneme Sınavı sayfasına git</button></div>' +
       '<div class="card"><h2>En zayıf alanların</h2>' + weak + "</div>" +
-      '<div class="card"><h2>Yüklü testler</h2><table class="list"><tr><th>Test</th><th>Kaynak</th><th>Soru</th><th>Çözülen</th><th>Açıklama</th></tr>' +
+      '<div class="card"><h2>Yüklü testler</h2><table class="list sets"><tr><th>Test</th><th>Kaynak</th><th>Soru</th><th>Çözülen</th><th>Açıklama</th></tr>' +
         SETS.map(function (set) {
           var ss = summary(QUESTIONS.filter(function (q) { return q.set === set; }));
           var hasExp = QUESTIONS.some(function (q) { return q.set === set && q.why; });

@@ -1,5 +1,5 @@
 // sw.js : İnternetsiz çalışma. Dosyaları cihazda saklar; internet varsa güncelini alır, yoksa saklananı kullanır.
-var CACHE = "ydsmaster-v1";
+var CACHE = "ydsmaster-v2";
 var FILES = ["./", "index.html", "style.css", "kilit.js", "app.js", "ogren.js", "manifest.webmanifest",
   "icon-192.png", "icon-512.png", "apple-touch-icon.png", "veri.enc"];
 
