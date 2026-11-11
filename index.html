@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="tr">
+<!-- index.html (web sürümü): Kilit ekranı. Şifre girilince şifreli veri (veri.enc) çözülür ve uygulama açılır. -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>YDS Master</title>
+  <meta name="theme-color" content="#0f2742">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="YDS Master">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" href="icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="locked">
+  <div class="shell">
+    <aside class="side">
+      <div class="brand">
+        <span class="brand-mark">Y</span>
+        <div>
+          <strong>YDS Master</strong>
+          <small>Kişisel çalışma sürümü</small>
+        </div>
+        <button type="button" class="lock-out" id="lock-out" title="Veriyi bu cihazdan sil ve kilitle">Kilitle</button>
+      </div>
+      <nav id="nav" class="nav" aria-label="Ana menü">
+        <a href="#/panel" data-route="panel">Panel</a>
+        <a href="#/sorular" data-route="sorular">Soru Bankası</a>
+        <a href="#/deneme" data-route="deneme">Deneme Sınavı</a>
+        <a href="#/kelime" data-route="kelime">Kelime Laboratuvarı</a>
+        <a href="#/gramer" data-route="gramer">Gramer Akademisi</a>
+        <a href="#/hatalar" data-route="hatalar">Hatalarım <span id="nav-badge" class="badge" hidden></span></a>
+        <a href="#/istatistik" data-route="istatistik">İstatistik</a>
+        <a href="#/rehber" data-route="rehber">Rehber</a>
+        <a href="#/yedek" data-route="yedek">Yedekleme</a>
+      </nav>
+      <p class="side-note">Bu uygulama ÖSYM ile bağlantılı değildir. İlerleme yalnızca bu cihazda saklanır.</p>
+    </aside>
+
+    <main id="view" class="main" tabindex="-1">
+      <div class="card lockbox" id="lockbox">
+        <h1>YDS Master</h1>
+        <p class="muted">Soru verisi şifrelidir. Devam etmek için şifreni gir.</p>
+        <form id="lockform" autocomplete="on">
+          <input type="text" name="username" value="YDS Master" autocomplete="username" hidden>
+          <label class="field">Şifre<input id="pass" class="inp" type="password" autocomplete="current-password" required></label>
+          <label class="check"><input type="checkbox" id="remember" checked> Bu cihazda hatırla (bir sonraki açılışta şifre sorulmaz)</label>
+          <div class="row" style="margin-top:16px"><button type="submit" class="btn primary" id="unlock">Aç</button></div>
+          <div id="lockmsg" style="margin-top:14px"></div>
+        </form>
+      </div>
+    </main>
+  </div>
+  <script src="kilit.js"></script>
+</body>
+</html>
