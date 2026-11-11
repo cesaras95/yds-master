@@ -78,7 +78,7 @@
   // =====================================================================
   // KELİME LABORATUVARI
   // =====================================================================
-  var kui = { tab: "liste", q: "", pos: "", lvl: "", st: "", only: "", open: null, kal: "phrasal", study: null };
+  var kui = { tab: "liste", q: "", pos: "", lvl: "", st: "", only: "", open: null, kal: "phrasal", study: null, limit: 150 };
 
   function viewWords() {
     var due = ITEMS.filter(function (it) { return isDue(it.key); }).length;
@@ -86,7 +86,7 @@
     var learning = ITEMS.filter(function (it) { return statusOf(it.key) === "learning"; }).length;
     var saved = Object.keys(store().saved).length;
     var html =
-      "<h1>Kelime Laboratuvarı</h1><p class=\"lead\">13 çıkmış ÖSYM sınavında sorulan kelimeler ve kalıplar. Her kelimenin sınavda geçtiği gerçek cümle ve soru yanında.</p>" +
+      "<h1>Kelime Laboratuvarı</h1><p class=\"lead\">13 çıkmış ÖSYM sınavında ve Akın Dil testlerinde şık olarak sorulan kelimeler, paragraflarda sık geçen akademik kelimeler ve kalıplar. Sınavda geçenlerin gerçek cümlesi ve sorusu yanında.</p>" +
       '<div class="grid">' + APP.stat(ITEMS.length, "Kelime ve phrasal verb") + APP.stat(due, "Bugün tekrar edilecek") + APP.stat(learning, "Öğreniliyor") + APP.stat(known, "Öğrenildi") + APP.stat(saved, "Defterimde") + "</div>" +
       tabs([["liste", "Kelimeler"], ["calis", "Çalış"], ["kaliplar", "Kalıplar"], ["yontem", "Nasıl çalışmalı?"]], kui.tab, "ktab") +
       '<div id="k-body"></div>';
@@ -111,6 +111,7 @@
       if (kui.st && statusOf(it.key) !== kui.st) return false;
       if (kui.only === "answer" && !it.refs.some(function (r) { return r.ans; })) return false;
       if (kui.only === "saved" && !s.saved[it.key]) return false;
+      if (kui.only === "exam" && !it.refs.length) return false;
       return true;
     });
   }
@@ -126,13 +127,16 @@
         '<label class="field">Tür' + sel("k-pos", [["", "Hepsi"], ["v", "Fiil"], ["n", "İsim"], ["adj", "Sıfat"], ["adv", "Zarf"], ["pv", "Phrasal verb"]], kui.pos) + "</label>" +
         '<label class="field">Seviye' + sel("k-lvl", [["", "Hepsi"], ["1", "Temel"], ["2", "Orta"], ["3", "İleri"]], kui.lvl) + "</label>" +
         '<label class="field">Durum' + sel("k-st", [["", "Hepsi"], ["new", "Yeni"], ["learning", "Öğreniliyor"], ["known", "Öğrenildi"]], kui.st) + "</label>" +
-        '<label class="field">Göster' + sel("k-only", [["", "Hepsi"], ["answer", "ÖSYM'de doğru cevap olanlar"], ["saved", "Kelime defterim"]], kui.only) + "</label>" +
+        '<label class="field">Göster' + sel("k-only", [["", "Hepsi"], ["exam", "Sınavda şık olarak çıkanlar"], ["answer", "ÖSYM'de doğru cevap olanlar"], ["saved", "Kelime defterim"]], kui.only) + "</label>" +
       "</div><p class=\"muted\" style=\"margin:12px 0 0\">" + list.length + " kayıt · sınavlarda en sık geçenden en aza sıralı</p></div>" +
-      '<div class="card" style="padding:6px 0">' + (list.length ? list.map(wordRow).join("") : '<p class="muted" style="padding:14px 20px">Bu filtrelere uyan kelime yok.</p>') + "</div>";
+      '<div class="card" style="padding:6px 0">' + (list.length ? list.slice(0, kui.limit).map(wordRow).join("") : '<p class="muted" style="padding:14px 20px">Bu filtrelere uyan kelime yok.</p>') + "</div>" +
+      (list.length > kui.limit ? '<p style="text-align:center"><button type="button" class="btn" id="k-more">Daha fazla göster (' + (list.length - kui.limit) + ' kayıt daha)</button></p>' : "");
+    var more = document.getElementById("k-more");
+    if (more) more.onclick = function () { var y = window.scrollY; kui.limit += 150; wordList(body); window.scrollTo(0, y); };
     var qi = document.getElementById("k-q");
-    qi.oninput = function () { kui.q = qi.value; var pos = qi.selectionStart; wordList(body); var n = document.getElementById("k-q"); n.focus(); n.setSelectionRange(pos, pos); };
+    qi.oninput = function () { kui.q = qi.value; kui.limit = 150; var pos = qi.selectionStart; wordList(body); var n = document.getElementById("k-q"); n.focus(); n.setSelectionRange(pos, pos); };
     [["k-pos", "pos"], ["k-lvl", "lvl"], ["k-st", "st"], ["k-only", "only"]].forEach(function (p) {
-      document.getElementById(p[0]).onchange = function (e) { kui[p[1]] = e.target.value; wordList(body); };
+      document.getElementById(p[0]).onchange = function (e) { kui[p[1]] = e.target.value; kui.limit = 150; wordList(body); };
     });
     body.querySelectorAll("[data-open]").forEach(function (b) {
       b.onclick = function () { var k = b.getAttribute("data-open"); kui.open = kui.open === k ? null : k; wordList(body); var el = document.getElementById("w-" + cssId(k)); if (el) el.scrollIntoView({ block: "nearest" }); };
